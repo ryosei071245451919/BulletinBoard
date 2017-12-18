@@ -15,7 +15,7 @@
                 </div>
         
                 <div class="center-head">
-                    <h1 class="title">スレッド一覧</h1>
+                    <h1 class="title">スレッド作成</h1>
                 </div>
                 
                 <div class="right-head">
@@ -51,17 +51,19 @@
         <!--ここまでhead-->
         
         <!--ここからbody-->
-        <div>
-            <h2>test</h2>
-            <h:dataTable value="#{bb.list}" var="b" width="999" border="1">
-                <h:column>#{b.title}</h:column>
-                <h:column>#{b.userId}</h:column>
-            </h:dataTable>
-            
-            <h:form>
-            <h:commandButton value="スレッド作成" action="#{bb.threadcreate()}"/>
-            </h:form>
-        </div>
+        
+        <h:form>
+            <h:panelGrid columns="3">
+                名前：<h:inputText id="userId" value="#{bb.userId}"/>
+                <h:message for="userId" styleClass="error"/>
+                タイトル：<h:inputText id="title" value="#{bb.title}"/>
+                <h:message for="title" styleClass="error"/>
+                削除キー：<h:inputText id="deleteKey" value="#{bb.deleteKey}"/>
+                <h:message for="deleteKey" styleClass="error"/>
+            </h:panelGrid>
+            <h:commandButton value="スレッド作成" action="#{bb.next}"/>
+        </h:form>
+        
         <!--ここまでbody-->
     </h:body>
 </html>

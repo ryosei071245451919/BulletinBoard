@@ -49,7 +49,6 @@ public class BoardBean {
             clear();
         }catch(Exception e){
             System.out.println(e);
-//            log.severe("★新規登録できない/"+threadId);
         }
     }
     public void clear(){
@@ -64,7 +63,11 @@ public class BoardBean {
         list = db.findAll();
         return "boardlist.xhtml";
     }
-
+    
+    public String threadcreate(){
+        return "threadcreate.xhtml";
+    }
+    
     public String getThreadId() {
         return threadId;
     }
