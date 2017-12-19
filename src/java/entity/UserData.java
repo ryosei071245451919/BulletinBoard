@@ -31,20 +31,21 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author st20153208
  */
 @Entity
-@Table(name = "user")
+@Table(name = "user_data")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
-    , @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId")
-    , @NamedQuery(name = "User.findByEntranceYear", query = "SELECT u FROM User u WHERE u.entranceYear = :entranceYear")
-    , @NamedQuery(name = "User.findByGuraduationYear", query = "SELECT u FROM User u WHERE u.guraduationYear = :guraduationYear")
-    , @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name")
-    , @NamedQuery(name = "User.findByNickname", query = "SELECT u FROM User u WHERE u.nickname = :nickname")
-    , @NamedQuery(name = "User.findByUsertype", query = "SELECT u FROM User u WHERE u.usertype = :usertype")
-    , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
-    , @NamedQuery(name = "User.findByQanswer", query = "SELECT u FROM User u WHERE u.qanswer = :qanswer")
-    , @NamedQuery(name = "User.findByQanswer2", query = "SELECT u FROM User u WHERE u.qanswer2 = :qanswer2")})
-public class User implements Serializable {
+    @NamedQuery(name = "UserData.findAll", query = "SELECT u FROM UserData u")
+    , @NamedQuery(name = "UserData.findByUserId", query = "SELECT u FROM UserData u WHERE u.userId = :userId")
+    , @NamedQuery(name = "UserData.findByEntranceYear", query = "SELECT u FROM UserData u WHERE u.entranceYear = :entranceYear")
+    , @NamedQuery(name = "UserData.findByGuraduationYear", query = "SELECT u FROM UserData u WHERE u.guraduationYear = :guraduationYear")
+    , @NamedQuery(name = "UserData.findByName", query = "SELECT u FROM UserData u WHERE u.name = :name")
+    , @NamedQuery(name = "UserData.findByNickname", query = "SELECT u FROM UserData u WHERE u.nickname = :nickname")
+    , @NamedQuery(name = "UserData.findByGender", query = "SELECT u FROM UserData u WHERE u.gender = :gender")
+    , @NamedQuery(name = "UserData.findByUsertype", query = "SELECT u FROM UserData u WHERE u.usertype = :usertype")
+    , @NamedQuery(name = "UserData.findByPassword", query = "SELECT u FROM UserData u WHERE u.password = :password")
+    , @NamedQuery(name = "UserData.findByQanswer", query = "SELECT u FROM UserData u WHERE u.qanswer = :qanswer")
+    , @NamedQuery(name = "UserData.findByQanswer2", query = "SELECT u FROM UserData u WHERE u.qanswer2 = :qanswer2")})
+public class UserData implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -73,6 +74,10 @@ public class User implements Serializable {
     private String nickname;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "gender")
+    private Character gender;
+    @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "usertype")
     private String usertype;
@@ -87,6 +92,8 @@ public class User implements Serializable {
     @Size(max = 100)
     @Column(name = "qanswer2")
     private String qanswer2;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Collection<Response> responseCollection;
     @JoinColumn(name = "department_id", referencedColumnName = "department_id")
     @ManyToOne(optional = false)
     private Department departmentId;
@@ -99,18 +106,19 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<BulletinBoard> bulletinBoardCollection;
 
-    public User() {
+    public UserData() {
     }
 
-    public User(String userId) {
+    public UserData(String userId) {
         this.userId = userId;
     }
 
-    public User(String userId, Date entranceYear, Date guraduationYear, String name, String usertype, String password) {
+    public UserData(String userId, Date entranceYear, Date guraduationYear, String name, Character gender, String usertype, String password) {
         this.userId = userId;
         this.entranceYear = entranceYear;
         this.guraduationYear = guraduationYear;
         this.name = name;
+        this.gender = gender;
         this.usertype = usertype;
         this.password = password;
     }
@@ -155,6 +163,14 @@ public class User implements Serializable {
         this.nickname = nickname;
     }
 
+    public Character getGender() {
+        return gender;
+    }
+
+    public void setGender(Character gender) {
+        this.gender = gender;
+    }
+
     public String getUsertype() {
         return usertype;
     }
@@ -185,6 +201,15 @@ public class User implements Serializable {
 
     public void setQanswer2(String qanswer2) {
         this.qanswer2 = qanswer2;
+    }
+
+    @XmlTransient
+    public Collection<Response> getResponseCollection() {
+        return responseCollection;
+    }
+
+    public void setResponseCollection(Collection<Response> responseCollection) {
+        this.responseCollection = responseCollection;
     }
 
     public Department getDepartmentId() {
@@ -230,19 +255,19 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
+        if (!(object instanceof UserData)) {
             return false;
         }
-        User other = (User) object;
+        UserData other = (UserData) object;
         if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
     }
 
-    
+    @Override
     public String toString() {
-        return userId;
+        return "entity.UserData[ userId=" + userId + " ]";
     }
     
 }

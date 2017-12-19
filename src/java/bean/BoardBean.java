@@ -7,32 +7,41 @@ package bean;
 
 import ejb.BulletinBoardFacade;
 import entity.BulletinBoard;
-import entity.User;
+import entity.UserData;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+//import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.*;
+
 
 /**
  *
  * @author st20153208
  */
 @Named(value = "bb")
+//@SessionScoped
+// implements Serializable
 @RequestScoped
-public class BoardBean {
+public class BoardBean{
 
     private String threadId;
     private String title;
     private String deleteKey;
-    private Date postDate;
-    private User userId;
+    private UserData ud;
+    private String userId;
     private List<BulletinBoard> list;
     
     @EJB
     BulletinBoardFacade db;
 //    transient Logger log;
     public String next(){
+        System.out.println("0");
         create();
         return null;
     }
@@ -43,10 +52,25 @@ public class BoardBean {
 }
     
     public void create(){
-        BulletinBoard bubo = new BulletinBoard(threadId,title,deleteKey,postDate,userId);
+        Date d = new Date();
+        SimpleDateFormat d1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        String postDate = d1.format(d);
+        try {
+            d = d1.parse(postDate);
+        } catch (ParseException ex) {
+            Logger.getLogger(BoardBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("1"+ postDate);
+        UserData uData = new UserData();
+        uData.setUserId(userId);
+        System.out.println("2");
+        BulletinBoard bubo = new BulletinBoard(threadId,title,deleteKey,d,uData);
+        System.out.println("3");
         try{
             db.create(bubo);
+            System.out.println("4");
             clear();
+            System.out.println("5");
         }catch(Exception e){
             System.out.println(e);
         }
@@ -55,17 +79,12 @@ public class BoardBean {
             threadId = null;
             title = null;
             deleteKey = null;
-            postDate = null;
             userId = null;
         }
     
     public String findAll(){
         list = db.findAll();
         return "boardlist.xhtml";
-    }
-    
-    public String threadcreate(){
-        return "threadcreate.xhtml";
     }
     
     public String getThreadId() {
@@ -92,22 +111,6 @@ public class BoardBean {
         this.deleteKey = deleteKey;
     }
 
-    public Date getPostDate() {
-        return postDate;
-    }
-
-    public void setPostDate(Date postDate) {
-        this.postDate = postDate;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
     public List<BulletinBoard> getList() {
         return list;
     }
@@ -115,4 +118,22 @@ public class BoardBean {
     public void setList(List<BulletinBoard> list) {
         this.list = list;
     }
+
+    public UserData getUd() {
+        return ud;
+    }
+
+    public void setUd(UserData ud) {
+        this.ud=ud;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    
+    
 }

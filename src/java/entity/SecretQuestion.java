@@ -10,6 +10,8 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,38 +37,37 @@ public class SecretQuestion implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
     @Column(name = "question_id")
-    private String questionId;
+    private Integer questionId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "question")
     private String question;
     @OneToMany(mappedBy = "questionId2")
-    private Collection<User> userCollection;
+    private Collection<UserData> userDataCollection;
     @OneToMany(mappedBy = "questionId")
-    private Collection<User> userCollection1;
+    private Collection<UserData> userDataCollection1;
 
     public SecretQuestion() {
     }
 
-    public SecretQuestion(String questionId) {
+    public SecretQuestion(Integer questionId) {
         this.questionId = questionId;
     }
 
-    public SecretQuestion(String questionId, String question) {
+    public SecretQuestion(Integer questionId, String question) {
         this.questionId = questionId;
         this.question = question;
     }
 
-    public String getQuestionId() {
+    public Integer getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    public void setQuestionId(Integer questionId) {
         this.questionId = questionId;
     }
 
@@ -79,21 +80,21 @@ public class SecretQuestion implements Serializable {
     }
 
     @XmlTransient
-    public Collection<User> getUserCollection() {
-        return userCollection;
+    public Collection<UserData> getUserDataCollection() {
+        return userDataCollection;
     }
 
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
+    public void setUserDataCollection(Collection<UserData> userDataCollection) {
+        this.userDataCollection = userDataCollection;
     }
 
     @XmlTransient
-    public Collection<User> getUserCollection1() {
-        return userCollection1;
+    public Collection<UserData> getUserDataCollection1() {
+        return userDataCollection1;
     }
 
-    public void setUserCollection1(Collection<User> userCollection1) {
-        this.userCollection1 = userCollection1;
+    public void setUserDataCollection1(Collection<UserData> userDataCollection1) {
+        this.userDataCollection1 = userDataCollection1;
     }
 
     @Override

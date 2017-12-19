@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,17 +35,16 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Department.findByDepartmentId", query = "SELECT d FROM Department d WHERE d.departmentId = :departmentId")
     , @NamedQuery(name = "Department.findByDepartmentName", query = "SELECT d FROM Department d WHERE d.departmentName = :departmentName")
     , @NamedQuery(name = "Department.findByDepartmentCode", query = "SELECT d FROM Department d WHERE d.departmentCode = :departmentCode")
-    , @NamedQuery(name = "Department.findByClass1", query = "SELECT d FROM Department d WHERE d.class1 = :class1")
+    , @NamedQuery(name = "Department.findByClassCode", query = "SELECT d FROM Department d WHERE d.classCode = :classCode")
     , @NamedQuery(name = "Department.findByYears", query = "SELECT d FROM Department d WHERE d.years = :years")})
 public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
     @Column(name = "department_id")
-    private String departmentId;
+    private Integer departmentId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 40)
@@ -56,32 +57,32 @@ public class Department implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
-    @Column(name = "class")
-    private String class1;
+    @Column(name = "class_code")
+    private String classCode;
     @Column(name = "years")
     private Integer years;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
-    private Collection<User> userCollection;
+    private Collection<UserData> userDataCollection;
 
     public Department() {
     }
 
-    public Department(String departmentId) {
+    public Department(Integer departmentId) {
         this.departmentId = departmentId;
     }
 
-    public Department(String departmentId, String departmentName, Character departmentCode, String class1) {
+    public Department(Integer departmentId, String departmentName, Character departmentCode, String classCode) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
         this.departmentCode = departmentCode;
-        this.class1 = class1;
+        this.classCode = classCode;
     }
 
-    public String getDepartmentId() {
+    public Integer getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(String departmentId) {
+    public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
     }
 
@@ -101,12 +102,12 @@ public class Department implements Serializable {
         this.departmentCode = departmentCode;
     }
 
-    public String getClass1() {
-        return class1;
+    public String getClassCode() {
+        return classCode;
     }
 
-    public void setClass1(String class1) {
-        this.class1 = class1;
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
     }
 
     public Integer getYears() {
@@ -118,12 +119,12 @@ public class Department implements Serializable {
     }
 
     @XmlTransient
-    public Collection<User> getUserCollection() {
-        return userCollection;
+    public Collection<UserData> getUserDataCollection() {
+        return userDataCollection;
     }
 
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
+    public void setUserDataCollection(Collection<UserData> userDataCollection) {
+        this.userDataCollection = userDataCollection;
     }
 
     @Override

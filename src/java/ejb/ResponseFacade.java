@@ -5,8 +5,7 @@
  */
 package ejb;
 
-import entity.BulletinBoard;
-import java.util.List;
+import entity.Response;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author st20153208
  */
 @Stateless
-public class BulletinBoardFacade extends AbstractFacade<BulletinBoard> {
+public class ResponseFacade extends AbstractFacade<Response> {
 
     @PersistenceContext(unitName = "board2PU")
     private EntityManager em;
@@ -26,12 +25,8 @@ public class BulletinBoardFacade extends AbstractFacade<BulletinBoard> {
         return em;
     }
 
-    public BulletinBoardFacade() {
-        super(BulletinBoard.class);
-    }
-
-    public List<BulletinBoard> BoardList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ResponseFacade() {
+        super(Response.class);
     }
     
 }

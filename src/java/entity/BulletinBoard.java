@@ -6,8 +6,10 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,12 +17,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,8 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "BulletinBoard.findByThreadId", query = "SELECT b FROM BulletinBoard b WHERE b.threadId = :threadId")
     , @NamedQuery(name = "BulletinBoard.findByTitle", query = "SELECT b FROM BulletinBoard b WHERE b.title = :title")
     , @NamedQuery(name = "BulletinBoard.findByDeleteKey", query = "SELECT b FROM BulletinBoard b WHERE b.deleteKey = :deleteKey")
-    , @NamedQuery(name = "BulletinBoard.findByPostDate", query = "SELECT b FROM BulletinBoard b WHERE b.postDate = :postDate")
-    , @NamedQuery(name = "BulletinBoard.findByPostData", query = "SELECT b FROM BulletinBoard b JOIN User u ON b.user_id = u.user_id")})
+    , @NamedQuery(name = "BulletinBoard.findByPostDate", query = "SELECT b FROM BulletinBoard b WHERE b.postDate = :postDate")})
 public class BulletinBoard implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,9 +63,11 @@ public class BulletinBoard implements Serializable {
     @Column(name = "post_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date postDate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bulletinBoard")
+    private Collection<Response> responseCollection;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
-    private User userId;
+    private UserData userId;
 
     public BulletinBoard() {
     }
@@ -71,12 +76,17 @@ public class BulletinBoard implements Serializable {
         this.threadId = threadId;
     }
 
-    public BulletinBoard(String threadId, String title, String deleteKey, Date postDate, User userId) {
+    public BulletinBoard(String threadId, String title, String deleteKey, Date postDate, Collection<Response> responseCollection, UserData userId) {
         this.threadId = threadId;
         this.title = title;
         this.deleteKey = deleteKey;
         this.postDate = postDate;
+        this.responseCollection = responseCollection;
         this.userId = userId;
+    }
+
+    public BulletinBoard(String threadId, String title, String deleteKey, Date postDate, UserData userId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getThreadId() {
@@ -111,14 +121,23 @@ public class BulletinBoard implements Serializable {
         this.postDate = postDate;
     }
 
-    public User getUserId() {
+    @XmlTransient
+    public Collection<Response> getResponseCollection() {
+        return responseCollection;
+    }
+
+    public void setResponseCollection(Collection<Response> responseCollection) {
+        this.responseCollection = responseCollection;
+    }
+
+    public UserData getUserId() {
         return userId;
     }
 
-    public void setUserId(User userId) {
+    public void setUserId(UserData userId) {
         this.userId = userId;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
