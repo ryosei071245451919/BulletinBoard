@@ -7,7 +7,6 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,8 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -54,16 +51,12 @@ public class UserData implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "user_id")
     private String userId;
-    @Basic(optional = false)
-    @NotNull
+    @Size(max = 4)
     @Column(name = "entrance_year")
-    @Temporal(TemporalType.DATE)
-    private Date entranceYear;
-    @Basic(optional = false)
-    @NotNull
+    private String entranceYear;
+    @Size(max = 4)
     @Column(name = "guraduation_year")
-    @Temporal(TemporalType.DATE)
-    private Date guraduationYear;
+    private String guraduationYear;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
@@ -92,8 +85,6 @@ public class UserData implements Serializable {
     @Size(max = 100)
     @Column(name = "qanswer2")
     private String qanswer2;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<Response> responseCollection;
     @JoinColumn(name = "department_id", referencedColumnName = "department_id")
     @ManyToOne(optional = false)
     private Department departmentId;
@@ -113,10 +104,8 @@ public class UserData implements Serializable {
         this.userId = userId;
     }
 
-    public UserData(String userId, Date entranceYear, Date guraduationYear, String name, Character gender, String usertype, String password) {
+    public UserData(String userId, String name, Character gender, String usertype, String password) {
         this.userId = userId;
-        this.entranceYear = entranceYear;
-        this.guraduationYear = guraduationYear;
         this.name = name;
         this.gender = gender;
         this.usertype = usertype;
@@ -131,19 +120,19 @@ public class UserData implements Serializable {
         this.userId = userId;
     }
 
-    public Date getEntranceYear() {
+    public String getEntranceYear() {
         return entranceYear;
     }
 
-    public void setEntranceYear(Date entranceYear) {
+    public void setEntranceYear(String entranceYear) {
         this.entranceYear = entranceYear;
     }
 
-    public Date getGuraduationYear() {
+    public String getGuraduationYear() {
         return guraduationYear;
     }
 
-    public void setGuraduationYear(Date guraduationYear) {
+    public void setGuraduationYear(String guraduationYear) {
         this.guraduationYear = guraduationYear;
     }
 
@@ -201,15 +190,6 @@ public class UserData implements Serializable {
 
     public void setQanswer2(String qanswer2) {
         this.qanswer2 = qanswer2;
-    }
-
-    @XmlTransient
-    public Collection<Response> getResponseCollection() {
-        return responseCollection;
-    }
-
-    public void setResponseCollection(Collection<Response> responseCollection) {
-        this.responseCollection = responseCollection;
     }
 
     public Department getDepartmentId() {

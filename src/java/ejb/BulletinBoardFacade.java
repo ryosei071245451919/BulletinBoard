@@ -6,7 +6,6 @@
 package ejb;
 
 import entity.BulletinBoard;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,10 +27,6 @@ public class BulletinBoardFacade extends AbstractFacade<BulletinBoard> {
 
     public BulletinBoardFacade() {
         super(BulletinBoard.class);
-    }
-
-    public List<BulletinBoard> BoardList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

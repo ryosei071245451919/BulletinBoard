@@ -46,10 +46,10 @@ public class BoardBean{
         return null;
     }
     
-    public String getBorad(){
-    list = db.BoardList();
-    return "boardlist.xhtml";
-}
+//    public String getBorad(){
+//    list = db.BoardList();
+//    return "boardlist.xhtml";
+//}
     
     public void create(){
         Date d = new Date();
