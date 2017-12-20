@@ -29,27 +29,21 @@ import javax.enterprise.context.*;
 // implements Serializable
 @RequestScoped
 public class BoardBean{
-
+    
     private String threadId;
     private String title;
     private String deleteKey;
     private UserData ud;
     private String userId;
     private List<BulletinBoard> list;
+    private BulletinBoard resList;
     
     @EJB
     BulletinBoardFacade db;
-//    transient Logger log;
     public String next(){
-        System.out.println("0");
         create();
         return null;
     }
-    
-//    public String getBorad(){
-//    list = db.BoardList();
-//    return "boardlist.xhtml";
-//}
     
     public void create(){
         Date d = new Date();
@@ -60,21 +54,18 @@ public class BoardBean{
         } catch (ParseException ex) {
             Logger.getLogger(BoardBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("1"+ postDate);
         UserData uData = new UserData();
         uData.setUserId(userId);
-        System.out.println("2");
         BulletinBoard bubo = new BulletinBoard(threadId,title,deleteKey,d,uData);
-        System.out.println("3");
         try{
             db.create(bubo);
-            System.out.println("4");
             clear();
-            System.out.println("5");
         }catch(Exception e){
             System.out.println(e);
         }
     }
+    
+    
     public void clear(){
             threadId = null;
             title = null;
@@ -82,10 +73,16 @@ public class BoardBean{
             userId = null;
         }
     
-    public String findAll(){
-        list = db.findAll();
-        return "boardlist.xhtml";
+    
+    public List<BulletinBoard> getAllBulletinBoard(){
+    return db.findAll();
+}
+    
+    public String detail(BulletinBoard bb){
+        resList = db.finddetail(bb.getThreadId());
+        return "threadcreate_1.xhtml";
     }
+    
     
     public String getThreadId() {
         return threadId;
@@ -134,6 +131,4 @@ public class BoardBean{
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    
-    
 }

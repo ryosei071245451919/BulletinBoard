@@ -9,6 +9,7 @@ import entity.BulletinBoard;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -27,6 +28,11 @@ public class BulletinBoardFacade extends AbstractFacade<BulletinBoard> {
 
     public BulletinBoardFacade() {
         super(BulletinBoard.class);
+    }
+    
+    public BulletinBoard finddetail(String threadId){
+        TypedQuery<BulletinBoard> query = em.createNamedQuery("BulletinBoard.findByThreadId",BulletinBoard.class).setParameter("threadId", threadId);
+        return query.getSingleResult();
     }
     
 }

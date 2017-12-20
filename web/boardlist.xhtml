@@ -53,10 +53,13 @@
         <!--ここからbody-->
         <div>
             <h2>test</h2>
-            <!--<h:dataTable value="#{bb.list}" var="b" width="999" border="1">
-                <h:column>#{b.title}</h:column>
-                <h:column>#{b.userId}</h:column>
-            </h:dataTable>-->
+            
+            <h:form>
+            <h:dataTable value="#{bb.allBulletinBoard}" var="b" width="999" border="1">
+                <h:column><h:commandLink><a href="#{bb.detail(b)}">#{b.title}</a></h:commandLink></h:column>
+                <h:column>#{b.userId.name}</h:column>
+            </h:dataTable>
+            </h:form>
             
             <h:form>
             <h:commandButton value="スレッド作成" action="threadcreate.xhtml"/>
