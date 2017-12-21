@@ -6,7 +6,10 @@
 package bean;
 
 import ejb.BulletinBoardFacade;
+import ejb.ResponseFacade;
 import entity.BulletinBoard;
+import entity.Response;
+import entity.ResponsePK;
 import entity.UserData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,10 +39,15 @@ public class BoardBean{
     private UserData ud;
     private String userId;
     private List<BulletinBoard> list;
-    private BulletinBoard resList;
+    private BulletinBoard td;
+    private String comment;
+    private List<Response> response;
+    private List<ResponsePK> responsePK; 
     
     @EJB
     BulletinBoardFacade db;
+    @EJB
+    ResponseFacade rf;
     public String next(){
         create();
         return null;
@@ -66,6 +74,31 @@ public class BoardBean{
     }
     
     
+    public String next2(){
+        create2();
+        return null;
+    }
+    
+    public void create2(){
+        Date d = new Date();
+        SimpleDateFormat d1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        String postDate = d1.format(d);
+        try {
+            d = d1.parse(postDate);
+        } catch (ParseException ex) {
+            Logger.getLogger(BoardBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        UserData uData = new UserData();
+        uData.setUserId(userId);
+        Response res = new Response(comment,d);
+        try{
+            rf.create(res);
+            clear();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    
     public void clear(){
             threadId = null;
             title = null;
@@ -75,12 +108,16 @@ public class BoardBean{
     
     
     public List<BulletinBoard> getAllBulletinBoard(){
-    return db.findAll();
+        return db.findAll();
+}
+
+    public List<Response> getAllResponse(){
+        return rf.findAll();
 }
     
     public String detail(BulletinBoard bb){
-        resList = db.finddetail(bb.getThreadId());
-        return "threadcreate_1.xhtml";
+        td = db.finddetail(bb.getThreadId());
+        return "threaddetails.xhtml";
     }
     
     
@@ -131,4 +168,42 @@ public class BoardBean{
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public BulletinBoard getTd() {
+        return td;
+    }
+
+    public void setTd(BulletinBoard td) {
+        this.td = td;
+    }
+
+
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public List<Response> getResponse() {
+        return response;
+    }
+
+    public void setResponse(List<Response> response) {
+        this.response = response;
+    }
+
+    public List<ResponsePK> getResponsePK() {
+        return responsePK;
+    }
+
+    public void setResponsePK(List<ResponsePK> responsePK) {
+        this.responsePK = responsePK;
+    }
+    
+    
+    
+    
 }
