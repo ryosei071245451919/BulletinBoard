@@ -43,6 +43,7 @@ public class BoardBean{
     private String comment;
     private List<Response> response;
     private List<ResponsePK> responsePK; 
+    private String responsId;
     
     @EJB
     BulletinBoardFacade db;
@@ -90,7 +91,14 @@ public class BoardBean{
         }
         UserData uData = new UserData();
         uData.setUserId(userId);
-        Response res = new Response(comment,d);
+        Response res = new Response();
+        ResponsePK resPK = new ResponsePK();
+        resPK.setThreadId("thr20171221134456");
+        resPK.setResponseId("res20171221154801");
+        res.setResponsePK(resPK);
+        res.setComment(comment);
+        res.setPostDate(d);
+        
         try{
             rf.create(res);
             clear();
@@ -104,6 +112,7 @@ public class BoardBean{
             title = null;
             deleteKey = null;
             userId = null;
+            comment = null;
         }
     
     
@@ -201,6 +210,14 @@ public class BoardBean{
 
     public void setResponsePK(List<ResponsePK> responsePK) {
         this.responsePK = responsePK;
+    }
+
+    public String getResponsId() {
+        return responsId;
+    }
+
+    public void setResponsId(String responsId) {
+        this.responsId = responsId;
     }
     
     
