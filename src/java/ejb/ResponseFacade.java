@@ -5,10 +5,13 @@
  */
 package ejb;
 
+import entity.BulletinBoard;
 import entity.Response;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -27,6 +30,13 @@ public class ResponseFacade extends AbstractFacade<Response> {
 
     public ResponseFacade() {
         super(Response.class);
+    }
+    
+    public List<Response> findByThreadId(String threadId){
+        TypedQuery<Response> query = em.createNamedQuery("Response.findByThreadId",Response.class).setParameter("threadId", threadId);
+        query.setFirstResult(0);
+        query.setMaxResults(100);
+        return query.getResultList();
     }
     
 }

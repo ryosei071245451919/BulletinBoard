@@ -41,8 +41,7 @@ public class BoardBean{
     private List<BulletinBoard> list;
     private BulletinBoard td;
     private String comment;
-    private List<Response> response;
-    private List<ResponsePK> responsePK; 
+    private List<Response> resList;
     private String responsId;
     
     @EJB
@@ -82,10 +81,16 @@ public class BoardBean{
     
     public void create2(){
         Date d = new Date();
+        Date d2 = new Date();
         SimpleDateFormat d1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+         SimpleDateFormat d3 = new SimpleDateFormat("dHms");
         String postDate = d1.format(d);
+        String postDate2 = d3.format(d);
         try {
             d = d1.parse(postDate);
+            d2 = d3.parse(postDate2);
+            System.out.println("d : "+d);
+            System.out.println("d2 : "+d2);
         } catch (ParseException ex) {
             Logger.getLogger(BoardBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,12 +98,12 @@ public class BoardBean{
         uData.setUserId(userId);
         Response res = new Response();
         ResponsePK resPK = new ResponsePK();
-        resPK.setThreadId("thr20171221134456");
-        resPK.setResponseId("res20171221154801");
+        resPK.setThreadId("thr"+d2);
+        resPK.setResponseId("res"+d2);
         res.setResponsePK(resPK);
         res.setComment(comment);
         res.setPostDate(d);
-        
+        res.setUserId(uData);
         try{
             rf.create(res);
             clear();
@@ -120,12 +125,13 @@ public class BoardBean{
         return db.findAll();
 }
 
-    public List<Response> getAllResponse(){
-        return rf.findAll();
+    public List<Response> getAllResponse(String threadId){
+        return rf.findByThreadId(threadId);
 }
     
     public String detail(BulletinBoard bb){
         td = db.finddetail(bb.getThreadId());
+        resList = getAllResponse(bb.getThreadId());
         return "threaddetails.xhtml";
     }
     
@@ -196,21 +202,15 @@ public class BoardBean{
         this.comment = comment;
     }
 
-    public List<Response> getResponse() {
-        return response;
+    public List<Response> getResList() {
+        return resList;
     }
 
-    public void setResponse(List<Response> response) {
-        this.response = response;
+    public void setResList(List<Response> resList) {
+        this.resList = resList;
     }
 
-    public List<ResponsePK> getResponsePK() {
-        return responsePK;
-    }
 
-    public void setResponsePK(List<ResponsePK> responsePK) {
-        this.responsePK = responsePK;
-    }
 
     public String getResponsId() {
         return responsId;

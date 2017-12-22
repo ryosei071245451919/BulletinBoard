@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -46,6 +48,9 @@ public class Response implements Serializable {
     @Column(name = "post_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date postDate;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne(optional = false)
+    private UserData userId;
 
     public Response() {
     }
@@ -61,10 +66,6 @@ public class Response implements Serializable {
 
     public Response(String threadId, String responseId) {
         this.responsePK = new ResponsePK(threadId, responseId);
-    }
-
-    public Response(String comment, Date d) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public ResponsePK getResponsePK() {
@@ -90,6 +91,16 @@ public class Response implements Serializable {
     public void setPostDate(Date postDate) {
         this.postDate = postDate;
     }
+
+    public UserData getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserData userId) {
+        this.userId = userId;
+    }
+    
+    
 
     @Override
     public int hashCode() {
